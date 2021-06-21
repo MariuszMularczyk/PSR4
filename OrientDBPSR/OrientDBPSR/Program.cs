@@ -72,12 +72,7 @@ namespace OrientDBPSR
                         Console.WriteLine("wpisz id do edycji");
                         string idToEdit = Console.ReadLine();
 
-
-                        List<ODocument> objectsToEdit = database.Select()
-                                                            .From("Book").Limit(1)
-                                                             .Where("@rid").Equals<string>(idToEdit).ToList();
                         int endEdit = 0;
-                        Book objectToEdit = objectsToEdit[0].To<Book>();
                         while (endEdit == 0)
                         {
 
@@ -95,18 +90,18 @@ namespace OrientDBPSR
                                 case "1":
 
                                     Console.WriteLine("podaj nowa nazwe");
-                                    objectToEdit.Name = Console.ReadLine();
-                                    
+                                     string nameE = Console.ReadLine();
+                                    database.Update().Class("Book").Where("@rid").Equals<string>(idToEdit).Set("Name", nameE).Run();
                                     break;
                                 case "2":
                                     Console.WriteLine("podaj nowego autora");
-                                    objectToEdit.Author = Console.ReadLine();
-                                   
+                                   string authorE = Console.ReadLine();
+                                    database.Update().Class("Book").Where("@rid").Equals<string>(idToEdit).Set("Author", authorE).Run();
                                     break;
                                 case "3":
                                     Console.WriteLine("podaj nowy rok wydania");
-                                    objectToEdit.Year = int.Parse(Console.ReadLine());
-                                    
+                                    int yearE = int.Parse(Console.ReadLine());
+                                    database.Update().Class("Book").Where("@rid").Equals<string>(idToEdit).Set("Year", yearE).Run();
                                     break;
                                 case "4":
                                     endEdit = 1;
@@ -117,18 +112,12 @@ namespace OrientDBPSR
                             }
 
                         }
-                        database.Update<Book>(objectToEdit).Run();
                         break;
                     case "5":
 
                         Console.WriteLine("wpisz id do usuniecia");
                         string objToDelete = Console.ReadLine();
-                        List<ODocument> objectsToDelete = database.Select()
-                                                           .From("Book").Limit(1)
-                                                            .Where("@rid").Equals<string>(objToDelete).ToList();
-
-                        Book objectToDelete = objectsToDelete[0].To<Book>();
-                        database.Delete.Document<Book>(objectToDelete).Run();
+                        database.Delete.Document<Book>().Where("@rid").Equals<string>(objToDelete).Run();
                         break;
                     case "6":
                         Console.WriteLine("podaj autora");
